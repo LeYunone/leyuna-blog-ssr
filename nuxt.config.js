@@ -15,6 +15,26 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  server: {
+    host: 'localhost',
+    port: 8000,
+    open: true,
+    strictPort: false,
+    https: false,
+    proxy: {
+      '/leyuna': {
+        target: 'http://127.0.0.1:9000',
+        changeOrigin: true,
+        secure: false
+      },
+      '/disk':{
+        target: 'http://127.0.0.1:9001',
+        changeOrigin: true,
+        secure: false
+      }
+
+    }
+  },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
