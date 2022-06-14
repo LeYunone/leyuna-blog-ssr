@@ -21,19 +21,6 @@ export default {
     open: true,
     strictPort: false,
     https: false,
-    proxy: {
-      '/leyuna': {
-        target: 'http://127.0.0.1:9000',
-        changeOrigin: true,
-        secure: false
-      },
-      '/disk':{
-        target: 'http://127.0.0.1:9001',
-        changeOrigin: true,
-        secure: false
-      }
-
-    }
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -55,8 +42,23 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios'
   ],
-
+  axios: {
+    proxy: true
+  },
+  proxy: {
+    '/leyuna': {
+      target: 'http://127.0.0.1:9000',
+      changeOrigin: true,
+      secure: false
+    },
+    '/disk': {
+      target: 'http://127.0.0.1:9001',
+      changeOrigin: true,
+      secure: false
+    }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/^element-ui/],
