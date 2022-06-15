@@ -1,12 +1,17 @@
 <template>
   <div class="header">
+    <!-- 折叠按钮 -->
     <div class="header-right">
       <a @click="search=true" class="el-icon-search"></a>
-      <a class="el-icon-circle-close" @click="clearCache"></a>
+      <a class="el-icon-circle-close"  @click="clearCache"></a>
     </div>
+    <el-drawer
+      :size="searchSize"
+      :visible.sync="search"
+      direction="ttb"
+    >
       <div class="search-from">
-        <el-input @input="searchKey(title)" @keyup.enter.native="searchKey(title)" v-model="title" type="search"
-                  placeholder="搜索..."/>
+        <el-input @input="searchKey(title)" @keyup.enter.native="searchKey(title)"  v-model="title"  type="search" placeholder="搜索..." />
       </div>
       <div class="search-content">
         <ol class="search-ol">
@@ -25,11 +30,6 @@
         >
         </el-pagination>
       </div>
-    <el-drawer
-      :size="searchSize"
-      v-model="search"
-      direction="ttb"
-    >
     </el-drawer>
   </div>
 </template>
@@ -55,7 +55,7 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
         }).then(({value}) => {
-          axios({
+          this.$axios({
             url: "/leyuna/server/clearCache",
             method: "GET",
             params: {
@@ -90,7 +90,7 @@
       },
       input(title) {
         if (title.length != 0) {
-          axios({
+          this.$axios({
             url: "/leyuna/blog/search",
             params: {
               title: title,
@@ -185,14 +185,6 @@
     font-size: 22px;
     color: rgba(0, 120, 231, .5);
   }
-
-  .collapse-btn {
-    float: left;
-    padding: 0 21px;
-    cursor: pointer;
-    line-height: 70px;
-  }
-
   .header-right {
     float: right;
     padding: 0 50px;

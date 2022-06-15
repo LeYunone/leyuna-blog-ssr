@@ -2,6 +2,9 @@
   <div>
     <Header></Header>
     <Sidebar></Sidebar>
+    <div class="main-m">
+      中间内容
+    </div>
   </div>
 
 </template>
@@ -27,3 +30,9 @@
     }
   }
 </script>
+<style>
+  .main-m{
+    padding-top: 3.75rem;;
+    padding-left: calc(22rem);
+  }
+</style>
