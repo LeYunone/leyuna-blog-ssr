@@ -1,10 +1,7 @@
 <template>
-  <div>
-    <div @click="sidebarBtn" class="sidebar-wrapper">
-      <span class="el-icon-caret-left"></span>
-    </div>
+  <div class="leftDiv">
     <div class="sidebar">
-      <el-row >
+      <el-row>
         <el-col>
           <el-menu
             default-active="2"
@@ -40,6 +37,9 @@
         </el-col>
       </el-row>
     </div>
+    <div @click="sidebarBtn" class="sidebar-wrapper">
+      <span class="left-btn el-icon-caret-left"></span>
+    </div>
   </div>
 </template>
 <script>
@@ -47,39 +47,56 @@
     data() {
       return {}
     },
-    methods:{
-      sidebarBtn(){
-
+    methods: {
+      sidebarBtn() {
+        if (!$(".leftDiv").hasClass("toggle")) {
+          $(".leftDiv").addClass("toggle")
+        } else {
+          $(".leftDiv").removeClass("toggle")
+        }
       }
     }
   };
 </script>
 
-<style>
-  .sidebar {
-    font-size: 16px;
-    width: 20rem;
-    position: fixed;
-    z-index: 13;
-    margin: 0;
-    top: 3.6rem;
-    left: 0;
-    bottom: 0;
-    box-sizing: border-box;
-    overflow-y: auto;
+<style type="text/css" >
+  .leftDiv {
+    float: left;
+    position: absolute;
+    width: 17rem;
+    height: 80%;
+    transition: transform 0.5s;
     transform: translateX(0%);
-    transition: transform .2s;
+    border-right: solid 1px #e6e6e6;
   }
-  .sidebar-wrapper{
+  .el-menu{
+    border-right: 0;
+  }
+  .leftDiv.toggle{
+    transform: translateX(-100%);
+  }
+
+  .sidebar {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .sidebar-wrapper {
     position: fixed;
-    top: calc(3.75rem);
+    top: 3.75rem;
     bottom: 0;
-    left: calc(20rem);
+    left: 100%;
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2rem;
     transition: left .3s ease;
+  }
+  .left-btn{
+    bottom: 0;
+  }
+  .sidebar-wrapper:hover{
+    background-color: hwb(0deg 97% 3%);
   }
 </style>
