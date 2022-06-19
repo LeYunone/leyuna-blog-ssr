@@ -184,6 +184,7 @@
     height: 70px;
     font-size: 22px;
     color: rgba(0, 120, 231, .5);
+    border-bottom: solid 1px #e6e6e6;
   }
   .header-right {
     float: right;

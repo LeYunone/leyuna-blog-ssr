@@ -38,7 +38,7 @@
       </el-row>
     </div>
     <div @click="sidebarBtn" class="sidebar-wrapper">
-      <span class="left-btn el-icon-caret-left"></span>
+      <span class="el-icon-arrow-left"></span>
     </div>
   </div>
 </template>
@@ -51,8 +51,14 @@
       sidebarBtn() {
         if (!$(".leftDiv").hasClass("toggle")) {
           $(".leftDiv").addClass("toggle")
+          $(".main-m").addClass("toggle")
+          $(".el-icon-arrow-left").addClass("el-icon-arrow-right")
+          $(".el-icon-arrow-left").removeClass("el-icon-arrow-left");
         } else {
           $(".leftDiv").removeClass("toggle")
+          $(".main-m").removeClass("toggle")
+          $(".el-icon-arrow-right").addClass("el-icon-arrow-left")
+          $(".el-icon-arrow-right").removeClass("el-icon-arrow-right");
         }
       }
     }
@@ -62,7 +68,7 @@
 <style type="text/css" >
   .leftDiv {
     float: left;
-    position: absolute;
+    position: fixed;
     width: 17rem;
     height: 80%;
     transition: transform 0.5s;
