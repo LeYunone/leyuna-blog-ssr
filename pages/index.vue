@@ -4,6 +4,14 @@
     <Sidebar></Sidebar>
     <div class="main-m">
       中间内容
+      <div id="nav-card" class="nav-card">
+        <p style="text-align: center;padding: 6px;color: #00a7e0">导航</p>
+        <div v-for="anchor in titles"
+             :style="{ padding: `5px 0 10px ${anchor.indent * 20}px` }"
+             @click="handleAnchorClick(anchor)">
+          <a style="cursor: pointer">{{ anchor.title }}</a>
+        </div>
+      </div>
       <v-md-editor mode="preview" v-model="text" width="500px" height="100%"></v-md-editor>
     </div>
   </div>
@@ -15,6 +23,7 @@
     name: 'index',
     data() {
       return {
+        titles:[],
         text:"# 反射应用场景\n" +
           ">本文不讲解反射的基本使用，仅记录反射的特殊使用场景\n" +
           "\n" +
@@ -164,10 +173,68 @@
           }
         ]
       }
-    }
+    },
+    mounted:function () {
+      this.loadBlogNav();
+    },
+    methods:{
+      loadBlogNav() {
+        const anchors = document.querySelectorAll('h1,h2,h3,h4,h5,h6');
+        const titles = Array.from(anchors).filter((title) => !!title.innerText.trim());
+        if (!titles.length) {
+          this.titles = [];
+          return;
+        }
+
+        const hTags = Array.from(new Set(titles.map((title) => title.tagName))).sort();
+
+        this.titles = titles.map((el) => ({
+          title: el.innerText,
+          lineIndex: el.getAttribute('data-v-md-line'),
+          indent: hTags.indexOf(el.tagName),
+        }));
+      },
+      handleAnchorClick(anchor){
+        if (this.ifNav == false) {
+          this.ifNav = true;
+          const navItem = document.querySelector('.v-md-editor-preview');
+          const {lineIndex} = anchor;
+          const heading = document.querySelector(
+            `[data-v-md-line="${lineIndex}"]`);
+
+          const top = heading.offsetTop;
+          let timer = setInterval(() => {
+            if (document.querySelector('.main').scrollTop < top) {
+              document.querySelector('.main').scrollTop += 140;
+              if (document.querySelector('.main').scrollTop >= top - 90){
+                clearInterval(timer)
+                this.ifNav = false
+              }
+            } else {
+              document.querySelector('.main').scrollTop -= 140
+              if (document.querySelector('.main').scrollTop <= top - 90){
+                clearInterval(timer)
+                this.ifNav = false
+              }
+            }
+
+            console.log(document.querySelector('.main').scrollTop + "===" + top)
+          }, 20,)
+
+
+        }
+      },
+    },
   }
 </script>
 <style>
+  .nav-card{
+    float:right;
+    position: sticky;
+    top: 0;
+    font-size: .9rem;
+    margin-right: 290px;
+  }
   .main-m{
     padding-top: 3.75rem;;
     padding-left: calc(22rem);
