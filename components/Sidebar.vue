@@ -4,35 +4,10 @@
       <el-row>
         <el-col>
           <el-menu
-            default-active="2"
+            default-active="16"
             class="el-menu-vertical-demo"
           >
-            <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>技术文章</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="1-1">Java基础</el-menu-item>
-                <el-menu-item index="1-2">Redis入门</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-            <el-menu-item index="2">
-              <i class="el-icon-menu"></i>
-              <span slot="title">开发日记</span>
-            </el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-document"></i>
-              <span slot="title">刷题日记</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting"></i>
-              <span slot="title">不正经</span>
-            </el-menu-item>
-            <el-menu-item index="5">
-              <i class="el-icon-setting"></i>
-              <span slot="title">网站公告</span>
-            </el-menu-item>
+            <MenuTree :menuData="menuList"></MenuTree>
           </el-menu>
         </el-col>
       </el-row>
@@ -43,10 +18,29 @@
   </div>
 </template>
 <script>
+  import axios from 'axios';
+  import MenuTree from "./MenuTree";
   export default {
+    components: {MenuTree},
     data() {
-      return {}
+      return {
+        menuList: []
+      }
     },
+    async fetch(){
+      const { data } = await axios.get('/leyuna/menu/getAllMenu');
+      this.menuList = data.data;
+    },
+    // mounted: async function () {
+    //   axios({
+    //     url: "/leyuna/menu/getAllMenu",
+    //     method: "get"
+    //   }).then((res) => {
+    //     var data = res.data;
+    //     console.log(data)
+    //     this.menuList = data.data
+    //   })
+    // },
     methods: {
       sidebarBtn() {
         if (!$(".leftDiv").hasClass("toggle")) {
@@ -65,7 +59,7 @@
   };
 </script>
 
-<style type="text/css" >
+<style type="text/css">
   .leftDiv {
     float: left;
     position: fixed;
@@ -75,10 +69,12 @@
     transform: translateX(0%);
     border-right: solid 1px #e6e6e6;
   }
-  .el-menu{
+
+  .el-menu {
     border-right: 0;
   }
-  .leftDiv.toggle{
+
+  .leftDiv.toggle {
     transform: translateX(-100%);
   }
 
@@ -99,10 +95,12 @@
     font-size: 2rem;
     transition: left .3s ease;
   }
-  .left-btn{
+
+  .left-btn {
     bottom: 0;
   }
-  .sidebar-wrapper:hover{
+
+  .sidebar-wrapper:hover {
     background-color: hwb(0deg 97% 3%);
   }
 </style>

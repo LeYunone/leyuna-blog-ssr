@@ -20,7 +20,7 @@ export default {
   },
   server: {
     host: 'localhost',
-    port: 8000,
+    port: 80,
     open: true,
     strictPort: false,
     https: false,
@@ -34,8 +34,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/element-ui',
-    '~plugins/element-ui.js',
-    '~plugins/markdown.js'
+    '@/plugins/markdown'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -46,16 +45,16 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
   axios: {
-    proxy: true
+    proxy: true,
+    prefix: '/leyuna'
   },
   proxy: {
     '/leyuna': {
-      target: 'http://127.0.0.1:9000',
-      changeOrigin: true,
-      secure: false
+      target: 'http://127.0.0.1:9000',//要代理的后端地址
     },
     '/disk': {
       target: 'http://127.0.0.1:9001',
