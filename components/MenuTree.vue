@@ -1,17 +1,19 @@
 <template>
   <div>
     <template v-for="menu in this.menuData">
-      <el-submenu :key="menu.menuId" :index="menu.menuId" v-if="menu.childrenMenu">
-        <template slot="title">
-<!--          <i :class="menu.icon"></i>-->
+      <nuxt-link :to="menu.menuUrl">
+        <el-submenu :key="menu.menuId" :index="menu.menuId" v-if="menu.childrenMenu">
+          <template slot="title">
+            <!--          <i :class="menu.icon"></i>-->
+            <span slot="title">{{menu.menuName}}</span>
+          </template>
+          <menu-tree :menuData="menu.childrenMenu"></menu-tree>
+        </el-submenu>
+        <el-menu-item :router="true" :route="menu.menuUrl" :key="menu.menuId" :index="menu.menuId" v-else>
+          <!--        <i :class="menu.icon"></i>-->
           <span slot="title">{{menu.menuName}}</span>
-        </template>
-        <menu-tree :menuData="menu.childrenMenu"></menu-tree>
-      </el-submenu>
-      <el-menu-item :key="menu.menuId" :index="menu.menuId" v-else>
-<!--        <i :class="menu.icon"></i>-->
-        <span slot="title">{{menu.menuName}}</span>
-      </el-menu-item>
+        </el-menu-item>
+      </nuxt-link>
     </template>
   </div>
 </template>
