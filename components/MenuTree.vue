@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-for="menu in this.menuData">
-      <nuxt-link :to="menu.menuUrl">
+      <nuxt-link :to="menu.menuUrl+'/'+menu.menuId">
         <el-submenu :key="menu.menuId" :index="menu.menuId" v-if="menu.childrenMenu">
           <template slot="title">
             <!--          <i :class="menu.icon"></i>-->
@@ -9,7 +9,7 @@
           </template>
           <menu-tree :menuData="menu.childrenMenu"></menu-tree>
         </el-submenu>
-        <el-menu-item :router="true" :route="menu.menuUrl" :key="menu.menuId" :index="menu.menuId" v-else>
+        <el-menu-item :route="menu.menuUrl" :key="menu.menuId" :index="menu.menuId" v-else>
           <!--        <i :class="menu.icon"></i>-->
           <span slot="title">{{menu.menuName}}</span>
         </el-menu-item>
