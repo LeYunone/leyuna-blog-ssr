@@ -5,7 +5,8 @@
     <div class="main-m">
       <div id="top-time-index">
         <el-steps space="300px" finish-status="success">
-          <el-step @click="getTimeListToYear(item.createDt)" v-for="item in timeList" :title="item.createDt"></el-step>
+          <el-step @click.native="getTimeListToYear(item.createDt)" v-for="item in allTime"
+                   :title="item.createDt"></el-step>
         </el-steps>
       </div>
       <div id="mid-time-index">
@@ -32,7 +33,8 @@
     name: 'timeIndex',
     data() {
       return {
-        timeList: []
+        timeList: [],
+        allTime:[]
       }
     },
     async asyncData({params}) {
@@ -47,56 +49,63 @@
       dataList.forEach((item, i) => {
         let index = -1;
         let isExists = newArr.some((newItem, j) => {
-          if(item.createDt.substr(0,4) == newItem.createDt){
+          if (item.createDt.substr(0, 4) == newItem.createDt) {
             index = j;
             return true;
           }
         })
 
-        if(!isExists){
+        if (!isExists) {
           newArr.push({
-            createDt:item.createDt.substr(0,4),
-            dataList:[item]
+            createDt: item.createDt.substr(0, 4),
+            dataList: [item]
           })
-        }else{
+        } else {
           newArr[index].dataList.push(item);
         }
       })
       console.log(newArr);
-      return {timeList: newArr}
+      return {timeList: newArr,allTime:newArr}
     },
 
 
     methods: {
-      getTimeListToYear(year){
-        const {data} = axios({
+      getTimeListToYear(year) {
+        let id = 2022;
+        axios({
           url: "/leyuna/blog/getTopMenuBlogs",
           method: "GET",
-          params: {"menuTopId": this.$router.params.id,
-                  "createDt":year}
-        })
-        let dataList = Array.from(data.data.records);
-        //以时间分组
-        let newArr = [];
-        dataList.forEach((item, i) => {
-          let index = -1;
-          let isExists = newArr.some((newItem, j) => {
-            if(item.createDt.substr(0,4) == newItem.createDt){
-              index = j;
-              return true;
-            }
-          })
+          params: {
+            "menuTopId": 1,
+            "createDt": year
+          }
+        }).then((res) => {
+          let data = res.data;
+          if(data.status){
+            let dataList = Array.from(data.data.records);
+            //以时间分组
+            let newArr = [];
+            dataList.forEach((item, i) => {
+              let index = -1;
+              let isExists = newArr.some((newItem, j) => {
+                if (item.createDt.substr(0, 4) == newItem.createDt) {
+                  index = j;
+                  return true;
+                }
+              })
 
-          if(!isExists){
-            newArr.push({
-              createDt:item.createDt.substr(0,4),
-              dataList:[item]
+              if (!isExists) {
+                newArr.push({
+                  createDt: item.createDt.substr(0, 4),
+                  dataList: [item]
+                })
+              } else {
+                newArr[index].dataList.push(item);
+              }
             })
-          }else{
-            newArr[index].dataList.push(item);
+            this.timeList = newArr;
           }
         })
-        console.log(newArr);
       }
     },
   }

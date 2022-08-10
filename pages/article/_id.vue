@@ -3,6 +3,16 @@
     <Header></Header>
     <Sidebar></Sidebar>
     <div class="main-m">
+      <div id="nav-card" class="nav-card">
+        <div v-for="anchor in titles"
+             :style="{ padding: `5px 0 10px ${anchor.indent * 20}px` }"
+             @click="handleAnchorClick(anchor)">
+          <a style="cursor: pointer">{{ anchor.title }}</a>
+        </div>
+      </div>
+      <div class="main-content">
+        <v-md-editor ref="preview" mode="preview" v-model="text" width="500px" height="100%"></v-md-editor>
+      </div>
     </div>
   </div>
 
@@ -15,14 +25,12 @@
     name: 'article',
     data() {
       return {
-        cardList:[]
       }
     },
     async asyncData({params}){
-      const { data } = await axios.get("/leyuna/blog/blogs")
-      console.log(data.data)
-      return  {cardList:data.data.records}
-    },
+      let articleId = params.id;
+
+      },
     mounted: function () {
       //默认得到该顶级菜单下的所有文章
     },
