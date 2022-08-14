@@ -12,38 +12,50 @@
         </el-col>
       </el-row>
     </div>
+    <div @click="sidebarBtn" class="sidebar-wrapper">
+      <span class="el-icon-arrow-left"></span>
+    </div>
   </div>
 </template>
 <script>
   import axios from 'axios';
   import MenuTree from "./MenuTree";
-
   export default {
     components: {MenuTree},
     data() {
       return {
-        menuList: [],
+        menuList: []
       }
     },
-    // async fetch() {
-    //
-    //   this.loading = loading;
-    // },
-    mounted: function () {
-      // const loading = this.$loading({
-      //   lock: true,
-      //   text: 'Loading',
-      //   spinner: 'el-icon-loading',
-      // });
-      axios.get('/leyuna/menu/getAllMenu').then(res => {
-        let data = res.data;
-        if(data.status){
-          this.menuList = data.data;
-        }
-        // loading.close();
-      });
+    async fetch(){
+      const { data } = await axios.get('/leyuna/menu/getAllMenu');
+      this.menuList = data.data;
     },
-    methods: {}
+    // mounted: async function () {
+    //   axios({
+    //     url: "/leyuna/menu/getAllMenu",
+    //     method: "get"
+    //   }).then((res) => {
+    //     var data = res.data;
+    //     console.log(data)
+    //     this.menuList = data.data
+    //   })
+    // },
+    methods: {
+      sidebarBtn() {
+        if (!$(".leftDiv").hasClass("toggle")) {
+          $(".leftDiv").addClass("toggle")
+          $(".main-m").addClass("toggle")
+          $(".el-icon-arrow-left").addClass("el-icon-arrow-right")
+          $(".el-icon-arrow-left").removeClass("el-icon-arrow-left");
+        } else {
+          $(".leftDiv").removeClass("toggle")
+          $(".main-m").removeClass("toggle")
+          $(".el-icon-arrow-right").addClass("el-icon-arrow-left")
+          $(".el-icon-arrow-right").removeClass("el-icon-arrow-right");
+        }
+      }
+    }
   };
 </script>
 

@@ -34,7 +34,8 @@
     data() {
       return {
         timeList: [],
-        allTime:[]
+        allTime:[],
+        menuTopId:"",
       }
     },
     async asyncData({params}) {
@@ -65,18 +66,17 @@
         }
       })
       console.log(newArr);
-      return {timeList: newArr,allTime:newArr}
+      return {timeList: newArr,allTime:newArr,menuTopId:params.id}
     },
 
 
     methods: {
       getTimeListToYear(year) {
-        let id = 2022;
         axios({
           url: "/leyuna/blog/getTopMenuBlogs",
           method: "GET",
           params: {
-            "menuTopId": 1,
+            "menuTopId": this.menuTopId,
             "createDt": year
           }
         }).then((res) => {
