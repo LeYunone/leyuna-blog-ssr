@@ -1,9 +1,9 @@
 <template>
-  <div class="header">
+  <header class="header">
     <!-- 折叠按钮 -->
     <div class="header-right">
       <a @click="search=true" class="el-icon-search"></a>
-      <a class="el-icon-circle-close"  @click="clearCache"></a>
+      <a class="el-icon-circle-close" @click="clearCache"></a>
     </div>
     <el-drawer
       :size="searchSize"
@@ -11,7 +11,8 @@
       direction="ttb"
     >
       <div class="search-from">
-        <el-input @input="searchKey(title)" @keyup.enter.native="searchKey(title)"  v-model="title"  type="search" placeholder="搜索..." />
+        <el-input @input="searchKey(title)" @keyup.enter.native="searchKey(title)" v-model="title" type="search"
+                  placeholder="搜索..."/>
       </div>
       <div class="search-content">
         <ol class="search-ol">
@@ -31,7 +32,7 @@
         </el-pagination>
       </div>
     </el-drawer>
-  </div>
+  </header>
 </template>
 <script>
   export default {
@@ -178,14 +179,22 @@
   }
 
   .header {
-    position: relative;
+    position: fixed;
+    top: 0px;
+    right: 0;
+    left: 0;
+    z-index: 200;
+    align-items: center;
+    justify-content: space-between;
     box-sizing: border-box;
+    background: white;
     width: 100%;
     height: 70px;
     font-size: 22px;
     color: rgba(0, 120, 231, .5);
     border-bottom: solid 1px #e6e6e6;
   }
+
   .header-right {
     float: right;
     padding: 0 50px;

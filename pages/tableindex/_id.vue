@@ -4,48 +4,35 @@
     <Sidebar></Sidebar>
     <div class="main-m">
       <el-table
-        :data="tableData"
-        style="width: 100%">
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="商品名称">
-                <span>{{ props.row.name }}</span>
-              </el-form-item>
-              <el-form-item label="所属店铺">
-                <span>{{ props.row.shop }}</span>
-              </el-form-item>
-              <el-form-item label="商品 ID">
-                <span>{{ props.row.id }}</span>
-              </el-form-item>
-              <el-form-item label="店铺 ID">
-                <span>{{ props.row.shopId }}</span>
-              </el-form-item>
-              <el-form-item label="商品分类">
-                <span>{{ props.row.category }}</span>
-              </el-form-item>
-              <el-form-item label="店铺地址">
-                <span>{{ props.row.address }}</span>
-              </el-form-item>
-              <el-form-item label="商品描述">
-                <span>{{ props.row.desc }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
+        :data="tableList"
+        style="width: 100%;margin-bottom: 20px;"
+        row-key="id"
+        border
+        default-expand-all
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+        <el-table-column
+          prop="date"
+          label="日期"
+          sortable
+          width="180">
         </el-table-column>
         <el-table-column
-          label="商品 ID"
-          prop="id">
+          prop="name"
+          label="姓名"
+          sortable
+          width="180">
         </el-table-column>
         <el-table-column
-          label="商品名称"
-          prop="name">
-        </el-table-column>
-        <el-table-column
-          label="描述"
-          prop="desc">
+          prop="address"
+          label="地址">
         </el-table-column>
       </el-table>
+
+      <div class="page-card">
+        <el-pagination background layout="prev, pager, next" :current-page="query.pageIndex"
+                       :page-size="query.pageSize" :total="query.pageTotal"
+                       @current-change="handlePageChange"></el-pagination>
+      </div>
     </div>
   </div>
 
@@ -58,30 +45,45 @@
     name: 'noteIndex',
     data() {
       return {
-        noteList:[]
+        tableList:[],
+        query: {
+          pageSize: 10,
+          pageTotal: 0,
+          pageIndex: 1,
+        },
       }
     },
     async asyncData({params}){
-      const { data } = await axios.get('/leyuna/blog/getTopMenuBlogs')
+      // const { data } = await axios.get('/leyuna/blog/getTopMenuBlogs')
+      const {data} = await axios.get("/leyuna/blog/blogs")
       console.log(data.data)
-      return  {noteList:data.data}
+      return  {tableList:data.data}
     },
     mounted: function () {
       //默认得到该顶级菜单下的所有文章
     },
     methods: {
+      handlePageChange(val) {
+        this.query.pageIndex = val;
+        this.tableData();
+      },
+      tableData(){
+        axios({
+          url:"/leyuna/blog/blogs",
+          params:{
+            index:this.query.pageIndex,
+            size:this.query.pageSize
+          }
+        }).then((res)=>{
+          var data = res.data;
+          if(data.status){
+            this.tableList = data.data;
+          }
+        })
+      }
     },
   }
 </script>
 
 <style>
-  .main-m {
-    padding-top: 3.75rem;;
-    padding-left: calc(22rem);
-    margin-left: 100px;
-    transition: margin-left 0.5s;
-  }
-  .main-m.toggle {
-    margin-left: -180px;
-  }
 </style>

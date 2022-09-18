@@ -112,13 +112,6 @@
 </script>
 
 <style>
-  .main-m {
-    padding-top: 3.75rem;;
-    padding-left: calc(22rem);
-    margin-left: 100px;
-    transition: margin-left 0.5s;
-  }
-
   .main-m.toggle {
     margin-left: -180px;
   }

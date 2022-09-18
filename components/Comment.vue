@@ -1,41 +1,36 @@
 <template>
-  <div>
-    <div class="do-comment">
-      <div class="do-information">
-        <el-form inline="true" label-width="70px">
-          <el-form-item>
-            <p style="color:#DB2828;font-family:'PingFang SC','Microsoft YaHei',Roboto,Arial,sans-serif">
-              [头像:一天一次]</p>
-            <el-upload
-              class="avatar-uploader"
-              action="/leyuna/tourist/requestUpImg"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
-              <el-avatar class="avatar" fit="contain" v-if="imageUrl" shape="square" :size="100"
-                         :src="imageUrl"></el-avatar>
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="署名">
-            <el-input placeholder="请输入署名\" style="width: 300px" required="true"
-                      v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="联系方式">
-            <el-input placeholder="自由发挥:网站\邮箱\某些联系方式(选填...)" style="width: 300px"
-                      v-model="form.information"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="success" @click="sumbitComment">提交</el-button>
-          </el-form-item>
-          <v-md-editor
-            left-toolbar="undo|redo|clear|bold italic strikethrough|ul ol|link code |emoji emoToolbar"
-            :toolbar="toolbar"
-            right-toolbar="sync-scroll preview" v-model="commentText"
-            height="300px" disabled-menus="[]"></v-md-editor>
-          <div class="length-count">{{commentText.length}}/500[30s/]</div>
-        </el-form>
-      </div>
+  <div class="bottom-comment">
+    <div class="do-information">
+      <el-form inline="true" label-width="70px">
+        <el-upload
+          style="margin-bottom: -45px"
+          class="avatar-uploader"
+          action="/leyuna/tourist/requestUpImg"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload">
+          <el-avatar class="avatar" fit="contain" v-if="imageUrl" shape="square" :size="100"
+                     :src="imageUrl"></el-avatar>
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+        <el-form-item style="margin-left: 100px" label="署名">
+          <el-input placeholder="请输入署名\" style="width: 300px" required="true"
+                    v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="联系方式">
+          <el-input placeholder="自由发挥:网站\邮箱\某些联系方式(选填...)" style="width: 300px"
+                    v-model="form.information"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="success" @click="sumbitComment">提交</el-button>
+        </el-form-item>
+        <v-md-editor
+          left-toolbar="undo|redo|clear|bold italic strikethrough|ul ol|link code |emoji emoToolbar"
+          :toolbar="toolbar"
+          right-toolbar="sync-scroll preview" v-model="commentText"
+          height="300px" disabled-menus="[]"></v-md-editor>
+        <div class="length-count">{{commentText.length}}/500[30s/]</div>
+      </el-form>
     </div>
     <div style="padding: .375em; font-weight: bold; font-size: 1.25em;">{{query.pageTotal}}条评论</div>
     <div class="comment-all">
@@ -49,7 +44,7 @@
           </div>
           <div class="comment-info">{{item.information}}</div>
           <div class="comment-content">
-            <v-md-editor :model-value="item.content" mode="preview"></v-md-editor>
+            <v-md-editor ref="preview" mode="preview" v-model="item.content"/>
           </div>
           <span @click="closeReply(item.id)" class="cancel-reply" v-if="isReply===item.id"
                 style="color: crimson">取消回复</span>
@@ -94,7 +89,7 @@
               </div>
               <div class="comment-info">{{subItem.information}}</div>
               <div class="comment-content">
-                <v-md-editor :model-value="subItem.content" mode="preview"></v-md-editor>
+                <v-md-editor ref="preview" mode="preview" v-model="subItem.content"/>
               </div>
               <span @click="closeReply(subItem.id)" class="cancel-reply" v-if="isReply===subItem.id"
                     style="color: crimson">取消回复
@@ -142,28 +137,30 @@
                        @current-change="handlePageChange"></el-pagination>
       </div>
     </div>
-    <el-dialog
-      title="emo"
-      v-model="emoDia"
-      width="36%"
-      center>
-      <el-image v-for="item in emoImg"
-                style="width: 60px; height: 60px;margin: 9px"
-                :src="item"
-                @click="markEmoImg(item)"
-                fit="contain"></el-image>
-    </el-dialog>
-    <el-dialog
-      title="emo"
-      v-model="emoReDia"
-      width="36%"
-      center>
-      <el-image v-for="item in emoReImg"
-                style="width: 60px; height: 60px;margin: 9px"
-                :src="item"
-                @click="markReEmoImg(item)"
-                fit="contain"></el-image>
-    </el-dialog>
+    <div clas="emo-img">
+      <el-dialog
+        title="emo"
+        v-model="emoDia"
+        width="36%"
+        center>
+        <el-image v-for="item in emoImg"
+                  style="width: 60px; height: 60px;margin: 9px"
+                  :src="item"
+                  @click="markEmoImg(item)"
+                  fit="contain"></el-image>
+      </el-dialog>
+      <el-dialog
+        title="emo"
+        v-model="emoReDia"
+        width="36%"
+        center>
+        <el-image v-for="item in emoReImg"
+                  style="width: 60px; height: 60px;margin: 9px"
+                  :src="item"
+                  @click="markReEmoImg(item)"
+                  fit="contain"></el-image>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -177,7 +174,6 @@
       return {
         emoDia: false,
         emoImg: [],
-
         emoReDia: false,
         emoReImg: [],
         toolbar: {
@@ -215,8 +211,7 @@
         },
         commentList: [],
         commentType: 2,
-        file: File,
-        valiValue: true
+        file: [],
       };
     },
     mounted: function () {
@@ -288,7 +283,7 @@
       sumbitReplyComment(id, reName) {
         const blogId = this.$route.query.blogId;
         axios({
-          url: "/leyuna/tourist/comment",
+          url: "/leyuna/comment/add",
           method: "POST",
           data: {
             content: this.replyCommentText,
@@ -328,91 +323,90 @@
           });
         }
         if (this.commentText == "") {
-          this.valiValue = false;
           this.$notify.error({
             title: '错误',
             message: '你想交空白卷吗',
           });
+          return;
         }
         if (this.form.name == "") {
-          this.valiValue = false;
           this.$notify.error({
             title: '错误',
             message: '至少填个署名吧',
           });
+          return;
         }
 
         //校验值规则
         if (this.form.name.length > 30) {
-          this.valiValue = false;
           this.$notify.error({
             title: '错误',
             message: '你是要写天书吗[指署名]',
           });
+          return;
         }
         if (this.commentText.length > 500 || this.replyCommentText.length > 500) {
-          this.valiValue = false;
           this.$notify.error({
             title: '错误',
             message: '过了过了,字写多了！',
           });
+          return;
         }
         if (this.form.information.length > 50) {
-          this.valiValue = false;
           this.$notify.error({
             title: '错误',
             message: '喂喂喂，太自由发挥了[指联系方式]',
           });
+          return;
         }
+        return true;
       },
       sumbitComment() {
+        const blogId = this.id;
         //校验
-        this.validator();
-        if (!this.valiValue) {
-          this.valiValue = true;
-          return false;
+        if (!this.validator()) {
+          return;
         }
         console.log(this.file)
         //如果游客上传了图片，则去文件服务器处理
         let formData = new FormData();
-        formData.append('file', this.file);
+        formData.append('files', this.file);
+        let fileId = null;
+        if (this.file.length != 0) {
+          let data = axios({
+            url: "/leyuna/file/fileUpload",
+            method: "POST",
+            processData: false, // 使数据不做处理
+            contentType: false,
+            dataType: 'json',
+            data: formData
+          });
+          if (data.status) {
+            fileId = data.data;
+            this.file = [];
+          }
+        }
+        //添加本次评论
         axios({
-          url: "/leyuna/server/tourist/upImg",
+          url: "/leyuna/comment/add",
           method: "POST",
-          processData: false, // 使数据不做处理
-          contentType: false,
-          dataType: 'json',
-          data: formData
+          data: {
+            content: this.commentText,
+            name: this.form.name,
+            information: this.form.information,
+            blogId: blogId,
+            fileId:fileId,
+          }
         }).then((res) => {
           var data = res.data;
           if (data.status) {
-            const blogId = this.$route.query.blogId;
-            //添加本次评论
-            axios({
-              url: "/leyuna/tourist/comment",
-              method: "POST",
-              data: {
-                content: this.commentText,
-                name: this.form.name,
-                commentHead: data.data,
-                information: this.form.information,
-                blogId: blogId,
-                ip: data.message
-              }
-            }).then((res) => {
-              var data = res.data;
-              if (data.status) {
-                this.valiValue = true;
-                this.$message.success("发布成功");
-                this.commentText = "";
-                this.form.name = "";
-                this.form.information = "";
-                this.query.pageTotal += 1;
-                this.commentList.splice(0, 0, data.data);
-              } else {
-                this.$message.error(data.message);
-              }
-            })
+            this.valiValue = true;
+            this.$message.success("发布成功");
+            this.commentText = "";
+            this.form.name = "";
+            this.form.information = "";
+            this.query.pageTotal += 1;
+            this.commentList.splice(0, 0, data.data);
           } else {
             this.$message.error(data.message);
           }
@@ -421,7 +415,7 @@
       handleAvatarSuccess(res, file) {
         if (res.status) {
           this.imageUrl = URL.createObjectURL(file.raw);
-          this.file = file.raw;
+          this.file.push(file.raw);
         } else {
           this.$message.error("别太频繁，明天再来换头像吧");
           this.imageUrl = res.message;
@@ -445,9 +439,9 @@
         this.comment();
       },
       comment() {
-        const blogId = this.$route.query.blogId;
+        const blogId = this.id;
         axios({
-          url: "/leyuna/tourist/comment/blog",
+          url: "/leyuna/comment/blog",
           methods: "GET",
           params: {
             index: this.query.pageIndex,
@@ -510,9 +504,6 @@
 
   .reply:hover {
     color: #b3e19d;
-  }
-
-  .do-comment {
   }
 
   .avatar-uploader {
@@ -589,5 +580,10 @@
     width: 0;
     padding-bottom: .5em;
     border-bottom: 1px dashed;
+  }
+  .bottom-comment{
+    margin: 0 1rem;
+    padding: 1rem;
+    background-color: #fff;
   }
 </style>

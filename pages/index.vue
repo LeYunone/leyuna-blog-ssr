@@ -222,19 +222,4 @@
     font-size: .9rem;
     margin-right: 290px;
   }
-
-  .main-m {
-    padding-top: 3.75rem;;
-    padding-left: calc(22rem);
-    margin-left: 100px;
-    transition: margin-left 0.5s;
-  }
-
-  .v-md-editor {
-    width: 70%;
-  }
-
-  .main-m.toggle {
-    margin-left: -180px;
-  }
 </style>

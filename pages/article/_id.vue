@@ -4,26 +4,29 @@
     <Sidebar></Sidebar>
     <div class="main-m">
       <div id="nav-card" class="nav-card">
-        <!--        <div v-for="anchor in titles"-->
-        <!--             :style="{ padding: `5px 0 10px ${anchor.indent * 20}px` }"-->
-        <!--             @click="handleAnchorClick(anchor)">-->
-        <!--          <a style="cursor: pointer">{{ anchor.title }}</a>-->
-        <!--        </div>-->
+<!--          <div v-for="anchor in titles"-->
+<!--               :style="{ padding: `5px 0 10px ${anchor.indent * 20}px` }"-->
+<!--               @click="handleAnchorClick(anchor)">-->
+<!--            <a style="cursor: pointer">{{ anchor.title }}</a>-->
+<!--          </div>-->
       </div>
       <div class="main-content">
         <header class="blog-header">
-          <p class="blog-title">{{article.title}}</p>
+          <h1 class="blog-title">{{article.title}}</h1>
           <div class="blog-info">
-            <span class="el-icon-timer">{{article.createDt}}</span><span>-</span> <span class="el-icon-edit">{{article.updateDt}}</span>
+            <span class="el-icon-timer"></span>
+            <time>{{article.createDt}}</time>
+            <span style="margin: 0 0.5rem;">-</span>
+            <span class="el-icon-edit"></span>
+            <time>{{article.updateDt}}</time>
           </div>
         </header>
-        <v-md-editor ref="preview" mode="preview" v-model="article.blogContent" width="500px"
+        <v-md-editor ref="preview" mode="preview" v-model="article.blogContent" width="100%"
                      height="100%"></v-md-editor>
+        <Comment :id=id></Comment>
       </div>
-<!--      <Comment :id=id></Comment>-->
     </div>
   </div>
-
 </template>
 
 <script>
@@ -46,7 +49,6 @@
       return {article: data.data, id: articleId};
     },
     mounted: function () {
-      //默认得到该顶级菜单下的所有文章
     },
     methods: {},
   }
@@ -54,17 +56,12 @@
 
 <style>
   .blog-header {
+    position: relative;
     text-align: center;
   }
 
-  .main-m {
-    padding-top: 3.75rem;;
-    padding-left: calc(22rem);
-    margin-left: 100px;
-    transition: margin-left 0.5s;
-  }
-
-  .main-m.toggle {
-    margin-left: -180px;
+  .main-content{
+    margin: 0 auto;
+    width: 90%;
   }
 </style>
