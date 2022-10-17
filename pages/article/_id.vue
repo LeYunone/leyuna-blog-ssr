@@ -10,7 +10,7 @@
 <!--            <a style="cursor: pointer">{{ anchor.title }}</a>-->
 <!--          </div>-->
       </div>
-      <div class="main-content">
+      <div class="article-content">
         <header class="blog-header">
           <h1 class="blog-title">{{article.title}}</h1>
           <div class="blog-info">
@@ -60,7 +60,7 @@
     text-align: center;
   }
 
-  .main-content{
+  .article-content{
     margin: 0 auto;
     width: 90%;
   }

@@ -3,7 +3,7 @@
     <Header></Header>
     <Sidebar></Sidebar>
     <div class="main-m">
-      <div class="main-content">
+      <div class="card-content">
         <el-col  class="card" v-for="(item,index) in cardList" :key="'article'+index">
           <el-row >
             <el-col >
@@ -16,7 +16,8 @@
                 </header>
 
                 <div class="card-mid">
-                  <v-md-preview-html :html="item.foreword" preview-class="vuepress-markdown-body"></v-md-preview-html>
+                  <v-md-editor ref="preview" mode="preview" v-model="item.foreword" width="100%"
+                               height="100%"></v-md-editor>
                 </div>
 
                 <div class="card-bottom">
@@ -52,9 +53,14 @@
       }
     },
     async asyncData({params}) {
-      const {data} = await axios.get("/leyuna/blog/blogs")
-      console.log(data.data)
-      return {cardList: data.data.records}
+      const {data} = await axios({
+        url: "/leyuna/blog/getTopMenuBlogs",
+        method: "GET",
+        params: {"menuId": params.id}
+      })
+      if (data.status) {
+        return {cardList: data.data.records}
+      }
     },
     mounted: function () {
       //默认得到该顶级菜单下的所有文章
@@ -92,9 +98,9 @@
     color: #E6A23C;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   }
-  .main-content{
+  .card-content{
     margin: 0 auto;
     height: 100%;
-    width: 500px;
+    width: 55%;
   }
 </style>

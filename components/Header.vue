@@ -1,10 +1,12 @@
 <template>
-  <header class="header">
-    <!-- 折叠按钮 -->
-    <div class="header-right">
-      <a @click="search=true" class="el-icon-search"></a>
-      <a class="el-icon-circle-close" @click="clearCache"></a>
-    </div>
+  <div id="top">
+    <header class="header">
+      <!-- 折叠按钮 -->
+      <div class="header-right">
+        <a @click="search=true" class="el-icon-search"></a>
+        <a class="el-icon-circle-close" @click="clearCache"></a>
+      </div>
+    </header>
     <el-drawer
       :size="searchSize"
       :visible.sync="search"
@@ -32,7 +34,7 @@
         </el-pagination>
       </div>
     </el-drawer>
-  </header>
+  </div>
 </template>
 <script>
   export default {
@@ -180,13 +182,11 @@
 
   .header {
     position: fixed;
-    top: 0px;
+    top: 0;
     right: 0;
     left: 0;
     z-index: 200;
     align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
     background: white;
     width: 100%;
     height: 70px;
@@ -210,11 +210,6 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-  }
-
-  .web-title {
-    text-align: center;
-    line-height: 70px;
   }
 
   .header-right a:hover {

@@ -28,7 +28,7 @@
       }
     },
     async fetch(){
-      const { data } = await axios.get('/leyuna/menu/getAllMenu');
+      const { data } = await axios.get('/leyuna/menu/getTreeMenu');
       this.menuList = data.data;
     },
     methods: {

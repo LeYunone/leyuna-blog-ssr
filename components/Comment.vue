@@ -140,24 +140,24 @@
     <div clas="emo-img">
       <el-dialog
         title="emo"
-        v-model="emoDia"
+        :visible.sync="emoDia"
         width="36%"
         center>
         <el-image v-for="item in emoImg"
                   style="width: 60px; height: 60px;margin: 9px"
-                  :src="item"
-                  @click="markEmoImg(item)"
+                  :src="item.fileUrl"
+                  @click="markEmoImg(item.fileUrl)"
                   fit="contain"></el-image>
       </el-dialog>
       <el-dialog
         title="emo"
-        v-model="emoReDia"
+        :visible.sync="emoReDia"
         width="36%"
         center>
         <el-image v-for="item in emoReImg"
                   style="width: 60px; height: 60px;margin: 9px"
-                  :src="item"
-                  @click="markReEmoImg(item)"
+                  :src="item.fileUrl"
+                  @click="markReEmoImg(item.fileUrl)"
                   fit="contain"></el-image>
       </el-dialog>
     </div>
@@ -220,22 +220,21 @@
     methods: {
       //添加表情包到mark中
       markEmoImg(emo) {
+        console.log(emo)
         document.execCommand('insertText', false, "![emo](" + emo + "){{{width=\"auto\" height=\"auto\"}}}")
         this.emoDia = false;
       },
       //获得服务器表情包
       getEmoList() {
         axios({
-          url: "/leyuna/blog/getEmoticon",
-          method: "GET"
-        }).then((res) => {
-          var data = res.data;
-          if (data.status) {
-            this.emoImg = data.data;
-          } else {
-            // ElMessage.error(data.message);
+          url: "/leyuna/file/list",
+          method: "GET",
+          params:{
+            "fileType":2
           }
-          console.log(this.emoImg)
+        }).then((res) => {
+          this.emoImg = res.data.data;
+          console.log(res)
         })
         this.emoDia = true;
       },
@@ -247,16 +246,14 @@
       },
       getReEmoList() {
         axios({
-          url: "/leyuna/blog/getEmoticon",
-          method: "GET"
-        }).then((res) => {
-          var data = res.data;
-          if (data.status) {
-            this.emoReImg = data.data;
-          } else {
-            // ElMessage.error(data.message);
+          url: "/leyuna/file/list",
+          method: "GET",
+          params:{
+            "fileType":2
           }
-          console.log(this.emoImg)
+        }).then((res) => {
+          this.emoReImg = res.data.data;
+          console.log(this.emoReImg)
         })
         this.emoReDia = true;
       },
@@ -371,6 +368,7 @@
         //如果游客上传了图片，则去文件服务器处理
         let formData = new FormData();
         formData.append('files', this.file);
+        formData.append('type', 1);
         let fileId = null;
         if (this.file.length != 0) {
           let data = axios({

@@ -35,38 +35,40 @@
       return {
         timeList: [],
         allTime:[],
-        menuTopId:"",
+        menuId:"",
       }
     },
     async asyncData({params}) {
       const {data} = await axios({
         url: "/leyuna/blog/getTopMenuBlogs",
         method: "GET",
-        params: {"menuTopId": params.id}
+        params: {"menuId": params.id}
       })
-      let dataList = Array.from(data.data.records);
-      //以时间分组
-      let newArr = [];
-      dataList.forEach((item, i) => {
-        let index = -1;
-        let isExists = newArr.some((newItem, j) => {
-          if (item.createDt.substr(0, 4) == newItem.createDt) {
-            index = j;
-            return true;
+      if(data.status){
+        let dataList = Array.from(data.data.records);
+        //以时间分组
+        let newArr = [];
+        dataList.forEach((item, i) => {
+          let index = -1;
+          let isExists = newArr.some((newItem, j) => {
+            if (item.createDt.substr(0, 4) == newItem.createDt) {
+              index = j;
+              return true;
+            }
+          })
+
+          if (!isExists) {
+            newArr.push({
+              createDt: item.createDt.substr(0, 4),
+              dataList: [item]
+            })
+          } else {
+            newArr[index].dataList.push(item);
           }
         })
-
-        if (!isExists) {
-          newArr.push({
-            createDt: item.createDt.substr(0, 4),
-            dataList: [item]
-          })
-        } else {
-          newArr[index].dataList.push(item);
-        }
-      })
-      console.log(newArr);
-      return {timeList: newArr,allTime:newArr,menuTopId:params.id}
+        console.log(newArr);
+        return {timeList: newArr,allTime:newArr,menuId:params.id}
+      }
     },
 
 
@@ -76,7 +78,7 @@
           url: "/leyuna/blog/getTopMenuBlogs",
           method: "GET",
           params: {
-            "menuTopId": this.menuTopId,
+            "menuId": this.menuId,
             "createDt": year
           }
         }).then((res) => {
